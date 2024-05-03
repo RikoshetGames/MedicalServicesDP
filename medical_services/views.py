@@ -18,7 +18,7 @@ def home(request):
 
 
 # Классы категории
-class CategoryCreateView(CreateView):
+class CategoryCreateView(CreateView, PermissionRequiredMixin):
     model = Category
     form_class = CategoryForm
     permission_required = 'medical_services.add_category'
