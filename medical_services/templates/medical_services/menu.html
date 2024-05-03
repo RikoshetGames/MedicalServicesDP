@@ -1,0 +1,64 @@
+{% load static %}
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+                     viewBox="0 0 24 24" focusable="false">
+                    <img src="{% static 'logo.png' %}" width="100" height="93" alt="Logo"/>
+                    <circle cx="12" cy="13" r="4"/>
+                </svg>
+            </a>
+            <div class="collapse bg-dark" id="navbarHeader">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-md-7 py-4">
+                            <h4 class="text-white" style="text-align: center;">Центр медицинских анализов</h4>
+                            <div class="col-12 d-flex justify-content-start align-items-center">
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'home' %}"><u>Главная</u></a>
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'category_list' %}"><u>Категории</u></a>
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'service_list' %}"><u>Услуги</u></a>
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'contacts' %}"><u>Контакты</u></a>
+                                {% if user.is_superuser or user.is_staff %}
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="/admin/"><u>Админка</u></a>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        <div class="col-sm-4 offset-md-1 py-4">
+                            {% if user.is_authenticated %}
+                            <h4 class="text-light">Пользователь {{ user.first_name }} {{ user.last_name }}</h4>
+                            <div class="col-12  justify-content-start align-items-center">
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'service_cart' %}"><u>Корзина</u></a>
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'users:profile' %}"><u>Профиль</u></a>
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'users:logout' %}"><u>Выход</u></a>
+                            </div>
+                            {% else %}
+                            <h4 class="text-muted">Войдите в личный кабинет</h4>
+                            <div class="col-12  justify-content-start align-items-center">
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'users:login' %}"><u>Вход</u></a>
+                                <a class="nav-link d-flex align-items-center text-light mx-2"
+                                   href="{% url 'users:register' %}"><u>Регистрация</u></a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+</header>

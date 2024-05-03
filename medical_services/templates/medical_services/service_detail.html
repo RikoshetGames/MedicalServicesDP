@@ -1,0 +1,53 @@
+{% extends 'medical_services/base.html' %}
+{% load my_tags_medical_services %}
+{% block content %}
+{% for object in object_list %}
+<div class="col-md-12">
+    <div class="card mb-4 box-shadow">
+        <div class="card-body">
+            <p>
+                <b>Название:</b> {{ object.services_title }}
+            </p>
+            <p>
+                <b>Категория:</b> {{ object.category | slice:":100" }}
+            </p>
+            <p>
+                <b>Описание:</b> {{ object.services_description }}
+            </p>
+            <p>
+                <b>Цена:</b> {{ object.price | slice:":100" }} рублей
+            </p>
+            <p>
+                <b>Срок выполнения:</b> {{ object.deadline| slice:":100" }}
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <form>
+                        <input type="button" class="btn btn-sm btn-info" value="Назад" onclick="history.back()">
+<!--                        <button type="button" class="btn btn-sm btn-success">Купить</button>-->
+                        {% if user.is_authenticated %}
+                        <a id="buy-button" class="btn btn-sm btn-success" href="#">Купить</a>
+                        {% endif %}
+                        <div id="cart-message" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0, 0, 0, 0.5); color: #fff; font-weight: bold; padding: 10px; border: 1px solid #ccc; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Товар добавлен в корзину</div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const buyButton = document.getElementById('buy-button');
+                                const cartMessage = document.getElementById('cart-message');
+
+                                buyButton.addEventListener('click', function() {
+                                    cartMessage.style.display = 'block';
+                                    setTimeout(function() {
+                                        cartMessage.style.display = 'none';
+                                    }, 3000); // 3 секунды
+                                });
+                            });
+                        </script>
+                    </form>
+                </div>
+                <small class="text-muted"></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{%  endblock %}
