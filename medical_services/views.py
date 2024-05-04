@@ -23,7 +23,7 @@ class CategoryCreateView(CreateView, PermissionRequiredMixin):
     model = Category
     form_class = CategoryForm
     permission_required = 'medical_services.add_category'
-    success_url = reverse_lazy("category_list")
+    success_url = reverse_lazy("medical_services:category_list")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -42,8 +42,8 @@ class CategoryListView(ListView):
 class CategoryUpdateView(UpdateView, PermissionRequiredMixin):
     model = Category
     form_class = CategoryForm
-    permission_required = 'medical_services.update_category'
-    success_url = reverse_lazy("category_list")
+    permission_required = 'medical_services.change_category'
+    success_url = reverse_lazy("medical_services:category_list")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -57,7 +57,7 @@ class CategoryUpdateView(UpdateView, PermissionRequiredMixin):
 
 class CategoryDeleteView(DeleteView, PermissionRequiredMixin):
     model = Category
-    success_url = reverse_lazy("category_list")
+    success_url = reverse_lazy("medical_services:category_list")
     permission_required = 'medical_services.delete_category'
     template_name = "medical_services/category_confirm_delete.html"
 
@@ -85,7 +85,7 @@ class ServiceCreateView(CreateView, PermissionRequiredMixin):
     model = Service
     form_class = ServicesForm
     permission_required = 'medical_services.add_service'
-    success_url = reverse_lazy("service_list")
+    success_url = reverse_lazy("medical_services:service_list")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -115,8 +115,8 @@ class ServiceDetailView(DetailView):
 class ServiceUpdateView(UpdateView, PermissionRequiredMixin):
     model = Service
     form_class = ServicesForm
-    permission_required = 'medical_services.update_service'
-    success_url = reverse_lazy("service_list")
+    permission_required = 'medical_services.change_service'
+    success_url = reverse_lazy("medical_services:service_list")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -130,7 +130,7 @@ class ServiceUpdateView(UpdateView, PermissionRequiredMixin):
 
 class ServiceDeleteView(DeleteView, PermissionRequiredMixin):
     model = Service
-    success_url = reverse_lazy("service_list")
+    success_url = reverse_lazy("medical_services:service_list")
     permission_required = 'medical_services.delete_service'
     template_name = "medical_services/service_confirm_delete.html"
 
@@ -167,9 +167,9 @@ class ContactView(View):
                 recipient_list=[settings.EMAIL_HOST_USER],  # Замените на реальный адрес администратора
             )
 
-            messages.success(request, 'Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.')
-
-            return redirect(reverse('medical_services:contacts'))  # Редирект на страницу контактов или другую подходящую страницу
+            success_message = 'Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.'
+            context = {'success_message': success_message}
+            return render(request, 'medical_services/contacts_success.html', context)
 
 
 class ServiceCartView(View):
@@ -227,11 +227,13 @@ class ServiceCartView(View):
                 recipient_list=[request.user.email],
             )
 
-            messages.success(request, 'Спасибо, что выбрали нас!')  # Добавление сообщения "спасибо"
+
 
             cart.services.clear()  # Очистка корзины
 
-            return redirect(reverse('medical_services:service_cart'))  # Редирект на страницу корзины
+            success_message = 'Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.'
+            context = {'success_message': success_message}
+            return render(request, 'medical_services/contacts_success.html', context)
         else:
             return HttpResponse('Ошибка отправки письма о заказе на вашу почту')
 
