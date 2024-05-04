@@ -146,8 +146,30 @@ class ServiceDeleteView(DeleteView, PermissionRequiredMixin):
 
 
 class ContactView(View):
+    """ Контакты """
+
     def get(self, request):
         return render(request, 'medical_services/contacts.html')
+
+    def post(self, request):
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            phone = request.POST.get('phone')
+            message = request.POST.get('message')
+
+            # Логика для отправки письма администратору
+            subject = 'Обращение от посетителя сайта'
+            admin_message = f'Имя: {name}\nТелефон: {phone}\nСообщение: {message}'
+            send_mail(
+                subject=subject,
+                message=admin_message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER],  # Замените на реальный адрес администратора
+            )
+
+            messages.success(request, 'Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.')
+
+            return redirect(reverse('medical_services:contacts'))  # Редирект на страницу контактов или другую подходящую страницу
 
 
 class ServiceCartView(View):
