@@ -24,24 +24,23 @@
                         <small class="text-muted">Срок выполнения: {{ service.deadline }}</small>
                     </div>
                     <span class="text-muted">{{ service.price }} ₽</span>
+                    <form method="post" action="{% url 'medical_services:remove_service' service.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="service_id" value="{{ service.id }}">
+                        <button type="submit" class="btn btn-link text-danger">Удалить</button>
+                    </form>
                 </li>
                 {% endfor %}
-                <!--                <li class="list-group-item d-flex justify-content-between bg-light">-->
-                <!--                    <div class="text-success">-->
-                <!--                        <h6 class="my-0">Promo code</h6>-->
-                <!--                        <small>EXAMPLECODE</small>-->
-                <!--                    </div>-->
-                <!--                    <span class="text-success">-5%</span>-->
-                <!--                </li>-->
                 <li class="list-group-item d-flex justify-content-between">
                     <span><strong>Итого</strong></span>
                     <strong>{{ total_price }} ₽</strong>
                 </li>
             </ul>
-
+            <form method="post" action="{% url 'medical_services:clear_service' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Очистить</button>
+            </form>
         </div>
-
-
         <div class="col-md-6 order-md-1">
             <h4 class="mb-3">Данные клиента</h4>
             <form class="needs-validation" novalidate>
@@ -95,11 +94,33 @@
                     </div>
                 </div>
                 <hr class="mb-4">
-                <form method="post" action="{% url 'send_email' %}">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Заказать</button>
-                </form>
+
+                <div class="mb-3">
+                    <label for="date">Выберите дату приема</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control" id="date" name="date" value="{{ date }}" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Выберите дату приема.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="time">Выберите время приема</label>
+                    <div class="input-group">
+                        <input type="time" class="form-control" id="time" name="time" value="{{ time }}" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Выберите время приема.
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Заказать</button>
             </form>
         </div>
     </div>
 </div>
-    {% endblock %}
+{% endblock %}
