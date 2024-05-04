@@ -20,6 +20,7 @@ from django.urls import reverse_lazy
 
 # Классы категории
 class CategoryCreateView(CreateView, PermissionRequiredMixin):
+    """Класс создания категорий медицинских услуг."""
     model = Category
     form_class = CategoryForm
     permission_required = 'medical_services.add_category'
@@ -36,10 +37,12 @@ class CategoryCreateView(CreateView, PermissionRequiredMixin):
 
 
 class CategoryListView(ListView):
+    """Класс отображения списка категорий медицинских услуг."""
     model = Category
 
 
 class CategoryUpdateView(UpdateView, PermissionRequiredMixin):
+    """Класс обновления категорий медицинских услуг."""
     model = Category
     form_class = CategoryForm
     permission_required = 'medical_services.change_category'
@@ -56,6 +59,7 @@ class CategoryUpdateView(UpdateView, PermissionRequiredMixin):
 
 
 class CategoryDeleteView(DeleteView, PermissionRequiredMixin):
+    """Класс удаления категорий медицинских услуг."""
     model = Category
     success_url = reverse_lazy("medical_services:category_list")
     permission_required = 'medical_services.delete_category'
@@ -73,6 +77,7 @@ class CategoryDeleteView(DeleteView, PermissionRequiredMixin):
 
 
 class CategoryServiceListView(ListView):
+    """Класс отображения списка услуг по категориям медицинских услуг."""
     model = Service
 
     def get_queryset(self):
@@ -82,6 +87,7 @@ class CategoryServiceListView(ListView):
 
 # Классы услуг
 class ServiceCreateView(CreateView, PermissionRequiredMixin):
+    """Класс создания услуг."""
     model = Service
     form_class = ServicesForm
     permission_required = 'medical_services.add_service'
@@ -98,10 +104,12 @@ class ServiceCreateView(CreateView, PermissionRequiredMixin):
 
 
 class ServiceListView(ListView):
+    """Класс отображения списка услуг."""
     model = Service
 
 
 class ServiceDetailView(DetailView):
+    """Класс отображения детальной информации о услуге."""
     model = Service
 
     def get(self, request, pk):
@@ -113,6 +121,7 @@ class ServiceDetailView(DetailView):
 
 
 class ServiceUpdateView(UpdateView, PermissionRequiredMixin):
+    """Класс обновления услуг."""
     model = Service
     form_class = ServicesForm
     permission_required = 'medical_services.change_service'
@@ -129,6 +138,7 @@ class ServiceUpdateView(UpdateView, PermissionRequiredMixin):
 
 
 class ServiceDeleteView(DeleteView, PermissionRequiredMixin):
+    """Класс удаления услуг."""
     model = Service
     success_url = reverse_lazy("medical_services:service_list")
     permission_required = 'medical_services.delete_service'
@@ -146,7 +156,7 @@ class ServiceDeleteView(DeleteView, PermissionRequiredMixin):
 
 
 class ContactView(View):
-    """ Контакты """
+    """Класс обработки формы обратной связи."""
 
     def get(self, request):
         return render(request, 'medical_services/contacts.html')
@@ -173,6 +183,7 @@ class ContactView(View):
 
 
 class ServiceCartView(View):
+    """Класс отображения корзины услуг."""
     model = Cart
 
     def get(self, request):
@@ -239,6 +250,7 @@ class ServiceCartView(View):
 
 
 class AddToCartView(View):
+    """Класс добавления услуги в корзину."""
     def post(self, request, pk):
         json_data = json.loads(request.body)
         service_id = json_data.get('service_id')
@@ -254,9 +266,11 @@ class AddToCartView(View):
 
 
 def home(request):
+    """Функция отображения главной страницы."""
     return render(request, 'medical_services/home.html')
 
 def remove_service(request, service_id):
+    """Функция удаления услуги из корзины."""
     if request.method == 'POST':
         service = get_object_or_404(Service, id=service_id)
         cart = Cart.objects.get(client=request.user)
@@ -266,6 +280,7 @@ def remove_service(request, service_id):
         return redirect(reverse('medical_services:service_cart'))
 
 def clear_service(request):
+    """Функция очистки корзины."""
     if request.method == 'POST':
         cart = Cart.objects.get(client=request.user)
         cart.services.clear()

@@ -8,6 +8,7 @@ NULLABLE = {'null': True, 'blank': True}
 
 
 class Category(models.Model):
+    """Модель категории."""
     category_title = models.CharField(max_length=100, verbose_name='название')
     category_description = models.TextField(verbose_name='описание')
     category_image = models.ImageField(upload_to='categories/', verbose_name='изображение', **NULLABLE)
@@ -23,7 +24,7 @@ class Category(models.Model):
 
 
 class Service(models.Model):
-
+    """Модель услуги."""
     services_title = models.CharField(max_length=100, verbose_name='название')
     services_description = models.TextField(verbose_name='описание')
     price = models.PositiveIntegerField(verbose_name='цена')
@@ -42,7 +43,7 @@ class Service(models.Model):
 
 
 class Cart(models.Model):
-
+    """Модель корзины."""
     client = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='клиент')
     services = models.ManyToManyField('Service', verbose_name='услуги')
     date = models.DateTimeField(verbose_name='дата и время', **NULLABLE)

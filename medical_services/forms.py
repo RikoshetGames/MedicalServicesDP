@@ -5,7 +5,7 @@ from medical_services.models import Service, Category, Cart
 
 
 class CategoryForm(forms.ModelForm):
-
+    """Форма создания категорий медицинских услуг."""
     class Meta:
         model = Category
         fields = ("category_title", "category_description", "category_image",)
@@ -17,7 +17,7 @@ class CategoryForm(forms.ModelForm):
 
 
 class ServicesForm(forms.ModelForm):
-
+    """Форма создания услуги."""
     class Meta:
         model = Service
         fields = ("services_title", "services_description", "category", "price", "deadline",)
@@ -29,7 +29,7 @@ class ServicesForm(forms.ModelForm):
 
 
 class CartForm(forms.ModelForm):
-
+    """Форма создания корзины."""
     class Meta:
         model = Cart
         fields = ("services", "date", "client",)

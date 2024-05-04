@@ -18,6 +18,7 @@ from users.service import send_new_password
 
 
 class RegisterView(CreateView):
+    """Регистрация пользователя."""
     model = User
     form_class = UserRegisterForm
     template_name = 'users/register.html'
@@ -57,6 +58,7 @@ class RegisterView(CreateView):
 
 
 def confirm_registration(request, token):
+    """Подтверждение регистрации."""
     print(token)  # Добавляем отладочную информацию для проверки полученного токена
     try:
         user = User.objects.get(email_confirmation_token=token)
@@ -76,6 +78,7 @@ def confirm_registration(request, token):
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
+    """Профиль пользователя."""
     model = User
     form_class = UserProfileForm
     success_url = reverse_lazy('users:profile')
@@ -85,9 +88,11 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
 
 def invalid_token_view(request):
+    """Недействительный токен."""
     return render(request, 'users/invalid_token.html')
 
 def generate_new_password(request):
+    """Генерация нового пароля."""
     new_password = User.objects.make_random_password()
     request.user.set_password(new_password)
     request.user.save()
@@ -95,6 +100,7 @@ def generate_new_password(request):
     return redirect(reverse('medical_services:home'))
 
 def reset_password(request):
+    """Восстановление пароля."""
     if request.method == 'POST':
         email = request.POST.get('email')
         try:
@@ -115,5 +121,6 @@ def reset_password(request):
         return render(request, 'users/reset_password.html')
 
 def logout_view(request):
+    """Выход пользователя."""
     logout(request)
     return redirect(reverse_lazy('users:login'))
