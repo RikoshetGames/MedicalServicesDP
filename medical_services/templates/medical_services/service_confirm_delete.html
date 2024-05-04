@@ -8,7 +8,7 @@
                     {% csrf_token %}
                     <p>Хотите удалить продукт "{{ object.services_title }}"?</p>
                     <button type="submit" class="btn btn-success">Подтвердить</button>
-                    <a href="{% url 'service_list' %}" class="btn btn-warning">Отмена</a>
+                    <a href="{% url 'medical_services:service_list' %}" class="btn btn-warning">Отмена</a>
                 </form>
             </div>
         </div>
