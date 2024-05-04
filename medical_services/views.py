@@ -1,10 +1,13 @@
 import json
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DeleteView, DetailView, CreateView, UpdateView, TemplateView
 from django.urls import reverse
@@ -179,6 +182,41 @@ class ServiceCartView(View):
         }
         return render(request, 'medical_services/shopping_cart.html', context)
 
+    def post(self, request):
+        cart = Cart.objects.filter(client=request.user).first()
+        if cart:
+            services = cart.services.all()
+            total_price = sum(service.price for service in services)
+
+            # Логика для отправки письма администратору
+            context = {'services': services, 'total_price': total_price, 'user': request.user}
+            admin_message = render_to_string('medical_services/admin_cart_email.html', context)
+            send_mail(
+                subject='Новый заказ в медицинской клинике',
+                message='Новый заказ в медицинской клинике',
+                html_message=admin_message,  # Отправка HTML-сообщения
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER],  # Замените на реальный адрес администратора
+            )
+
+            # Логика для отправки письма пользователю
+            user_message = render_to_string('medical_services/cart_email.html', context)
+            send_mail(
+                subject='Оформление заказа в медицинской клинике',
+                message='Оформление заказа в медицинской клинике',
+                html_message=user_message,  # Отправка HTML-сообщения
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[request.user.email],
+            )
+
+            messages.success(request, 'Спасибо, что выбрали нас!')  # Добавление сообщения "спасибо"
+
+            cart.services.clear()  # Очистка корзины
+
+            return redirect(reverse('medical_services:service_cart'))  # Редирект на страницу корзины
+        else:
+            return HttpResponse('Ошибка отправки письма о заказе на вашу почту')
+
 
 class AddToCartView(View):
     def post(self, request, pk):
@@ -195,17 +233,21 @@ class AddToCartView(View):
         return JsonResponse({'message': 'Услуга успешно добавлена в корзину.'})
 
 
-def send_cart_email(request):
+def remove_service(request, service_id):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        # Логика для отправки письма
-        message = render_to_string('cart_email.html')
-        send_mail(
-            subject='Оформление заказа в медицинской клинике',
-            message=message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[request.user.email],  # Замените на адрес получателя
-        )
-        return HttpResponse('Письмо о заказе отправлено на вашу почту')  # Ответ на успешную отправку
+        service = get_object_or_404(Service, id=service_id)
+        cart = Cart.objects.get(client=request.user)
+        cart.services.remove(service)
+        return redirect(reverse('medical_services:service_cart'))
     else:
-        return HttpResponse('Ошибка отправки письма о заказе на вашу почту')  # Ответ на недопустимый метод запроса
+        return redirect(reverse('medical_services:service_cart'))
+
+def clear_service(request):
+    if request.method == 'POST':
+        cart = Cart.objects.get(client=request.user)
+        cart.services.clear()
+        return redirect(reverse('medical_services:service_cart'))
+    else:
+        return redirect(reverse('medical_services:service_cart'))
+
+

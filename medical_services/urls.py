@@ -2,13 +2,16 @@ from django.urls import path
 from medical_services.views import home, CategoryListView, CategoryCreateView, ServiceListView, \
     CategoryServiceListView, \
     ServiceCreateView, ServiceDetailView, ServiceUpdateView, ServiceDeleteView, CategoryUpdateView, CategoryDeleteView, \
-    ContactView, ServiceCartView, send_cart_email, AddToCartView
+    ContactView, ServiceCartView, AddToCartView, remove_service, clear_service
+
+app_name = 'medical_services'
 
 urlpatterns = [
     path('', home, name='home'),
     path('contacts/', ContactView.as_view(), name='contacts'),
-    path('service_cart/', ServiceCartView.as_view(), name='service_cart'),
-    path('send_email/', send_cart_email, name='send_email'),
+    path('add_to_cart/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
+    path('remove_service/<int:service_id>/', remove_service, name='remove_service'),
+    path('clear_service/', clear_service, name='clear_service'),
 
 
     path('category_create/', CategoryCreateView.as_view(), name='category_create'),
@@ -22,5 +25,5 @@ urlpatterns = [
     path('service_detail/<int:pk>/', ServiceDetailView.as_view(), name='service_detail'),
     path('service_update/<int:pk>/', ServiceUpdateView.as_view(), name='service_update'),
     path('service_delete/<int:pk>/', ServiceDeleteView.as_view(), name='service_delete'),
-    path('add_to_cart/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
+    path('service_cart/', ServiceCartView.as_view(), name='service_cart'),
     ]
