@@ -91,6 +91,7 @@ def invalid_token_view(request):
     """Недействительный токен."""
     return render(request, 'users/invalid_token.html')
 
+
 def generate_new_password(request):
     """Генерация нового пароля."""
     new_password = User.objects.make_random_password()
@@ -98,6 +99,7 @@ def generate_new_password(request):
     request.user.save()
     send_new_password(request.user.email, new_password)
     return redirect(reverse('medical_services:home'))
+
 
 def reset_password(request):
     """Восстановление пароля."""
@@ -119,6 +121,7 @@ def reset_password(request):
             return render(request, 'users/password_recovery_failure.html')
     else:
         return render(request, 'users/reset_password.html')
+
 
 def logout_view(request):
     """Выход пользователя."""

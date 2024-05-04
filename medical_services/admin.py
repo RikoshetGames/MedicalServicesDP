@@ -3,7 +3,6 @@ from django.contrib import admin
 from medical_services.models import Category, Service, Cart
 
 
-#Register your models here.
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('category_title', 'category_description', 'category_image')

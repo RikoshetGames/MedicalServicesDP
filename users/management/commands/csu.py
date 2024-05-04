@@ -1,12 +1,11 @@
 from django.core.management import BaseCommand
-
 from users.models import User
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        user =User.objects.create(
+        user = User.objects.create(
             email='rikoshet645@gmail.com',
             first_name='Moder',
             last_name='Moderov',

@@ -1,6 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
-
 from medical_services.models import Service, Category, Cart
 
 

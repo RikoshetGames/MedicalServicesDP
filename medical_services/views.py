@@ -1,15 +1,11 @@
 import json
-
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import ListView, DeleteView, DetailView, CreateView, UpdateView, TemplateView
+from django.views.generic import ListView, DeleteView, DetailView, CreateView, UpdateView
 from django.urls import reverse
 from config import settings
 from medical_services.forms import CategoryForm, ServicesForm
@@ -238,8 +234,6 @@ class ServiceCartView(View):
                 recipient_list=[request.user.email],
             )
 
-
-
             cart.services.clear()  # Очистка корзины
 
             success_message = 'Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.'
@@ -269,6 +263,7 @@ def home(request):
     """Функция отображения главной страницы."""
     return render(request, 'medical_services/home.html')
 
+
 def remove_service(request, service_id):
     """Функция удаления услуги из корзины."""
     if request.method == 'POST':
@@ -279,6 +274,7 @@ def remove_service(request, service_id):
     else:
         return redirect(reverse('medical_services:service_cart'))
 
+
 def clear_service(request):
     """Функция очистки корзины."""
     if request.method == 'POST':
@@ -287,5 +283,3 @@ def clear_service(request):
         return redirect(reverse('medical_services:service_cart'))
     else:
         return redirect(reverse('medical_services:service_cart'))
-
-
