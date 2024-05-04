@@ -17,11 +17,6 @@ from users.models import User
 from users.service import send_new_password
 
 
-def logout_view(request):
-    logout(request)
-    return redirect(reverse_lazy('users:login'))
-
-
 class RegisterView(CreateView):
     model = User
     form_class = UserRegisterForm
@@ -80,10 +75,6 @@ def confirm_registration(request, token):
         return redirect('users:invalid_token')
 
 
-def invalid_token_view(request):
-    return render(request, 'users/invalid_token.html')
-
-
 class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserProfileForm
@@ -93,13 +84,15 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
+def invalid_token_view(request):
+    return render(request, 'users/invalid_token.html')
+
 def generate_new_password(request):
     new_password = User.objects.make_random_password()
     request.user.set_password(new_password)
     request.user.save()
     send_new_password(request.user.email, new_password)
     return redirect(reverse('medical_services:home'))
-
 
 def reset_password(request):
     if request.method == 'POST':
@@ -120,3 +113,7 @@ def reset_password(request):
             return render(request, 'users/password_recovery_failure.html')
     else:
         return render(request, 'users/reset_password.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy('users:login'))

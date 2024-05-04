@@ -18,10 +18,6 @@ from medical_services.models import Category, Service, Cart
 from django.urls import reverse_lazy
 
 
-def home(request):
-    return render(request, 'medical_services/home.html')
-
-
 # Классы категории
 class CategoryCreateView(CreateView, PermissionRequiredMixin):
     model = Category
@@ -232,6 +228,9 @@ class AddToCartView(View):
 
         return JsonResponse({'message': 'Услуга успешно добавлена в корзину.'})
 
+
+def home(request):
+    return render(request, 'medical_services/home.html')
 
 def remove_service(request, service_id):
     if request.method == 'POST':
