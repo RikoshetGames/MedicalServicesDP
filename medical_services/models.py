@@ -45,7 +45,7 @@ class Cart(models.Model):
 
     client = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='клиент')
     services = models.ManyToManyField('Service', verbose_name='услуги')
-    date = models.DateTimeField(verbose_name='дата и время')
+    date = models.DateTimeField(verbose_name='дата и время', **NULLABLE)
 
     def __str__(self):
         return f'{self.client} - {self.services}'

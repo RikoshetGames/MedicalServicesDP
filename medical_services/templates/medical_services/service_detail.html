@@ -24,24 +24,30 @@
                 <div class="btn-group">
                     <form>
                         <input type="button" class="btn btn-sm btn-info" value="Назад" onclick="history.back()">
-<!--                        <button type="button" class="btn btn-sm btn-success">Купить</button>-->
                         {% if user.is_authenticated %}
-                        <a id="buy-button" class="btn btn-sm btn-success" href="#">Купить</a>
-                        {% endif %}
-                        <div id="cart-message" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0, 0, 0, 0.5); color: #fff; font-weight: bold; padding: 10px; border: 1px solid #ccc; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">Товар добавлен в корзину</div>
+                        <button id="buyButton" class="btn btn-sm btn-success">Купить</button>
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                const buyButton = document.getElementById('buy-button');
-                                const cartMessage = document.getElementById('cart-message');
-
-                                buyButton.addEventListener('click', function() {
-                                    cartMessage.style.display = 'block';
-                                    setTimeout(function() {
-                                        cartMessage.style.display = 'none';
-                                    }, 3000); // 3 секунды
+                            document.getElementById('buyButton').addEventListener('click', function() {
+                                const serviceId = "{{ object.id }}"; // Проверьте доступ к id услуги
+                                fetch(`/add_to_cart/${serviceId}/`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRFToken': '{{ csrf_token }}',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ service_id: serviceId })
+                                }).then(response => {
+                                    if (response.ok) {
+                                        alert('Услуга успешно добавлена в корзину!');
+                                    } else {
+                                        alert('Ошибка при добавлении в корзину');
+                                    }
+                                }).catch(error => {
+                                    console.error('Ошибка:', error);
                                 });
                             });
                         </script>
+                        {% endif %}
                     </form>
                 </div>
                 <small class="text-muted"></small>
@@ -50,4 +56,4 @@
     </div>
 </div>
 {% endfor %}
-{%  endblock %}
+{% endblock %}

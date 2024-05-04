@@ -2,7 +2,8 @@ from django.urls import path
 from medical_services.views import home, CategoryListView, CategoryCreateView, ServiceListView, \
     CategoryServiceListView, \
     ServiceCreateView, ServiceDetailView, ServiceUpdateView, ServiceDeleteView, CategoryUpdateView, CategoryDeleteView, \
-    ContactView, ServiceCartView, send_cart_email
+    ContactView, ServiceCartView, send_cart_email, AddToCartView
+
 urlpatterns = [
     path('', home, name='home'),
     path('contacts/', ContactView.as_view(), name='contacts'),
@@ -21,4 +22,5 @@ urlpatterns = [
     path('service_detail/<int:pk>/', ServiceDetailView.as_view(), name='service_detail'),
     path('service_update/<int:pk>/', ServiceUpdateView.as_view(), name='service_update'),
     path('service_delete/<int:pk>/', ServiceDeleteView.as_view(), name='service_delete'),
+    path('add_to_cart/<int:pk>/', AddToCartView.as_view(), name='add_to_cart'),
     ]

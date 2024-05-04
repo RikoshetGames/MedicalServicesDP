@@ -1,6 +1,8 @@
+import json
+
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views import View
@@ -49,7 +51,7 @@ class CategoryUpdateView(UpdateView, PermissionRequiredMixin):
         self.object = None
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('medical_services.update_category'):
+        if not request.user.has_perm('medical_services.change_category'):
             return HttpResponseForbidden("У вас нет доступа")
         return super().dispatch(request, *args, **kwargs)
 
@@ -122,7 +124,7 @@ class ServiceUpdateView(UpdateView, PermissionRequiredMixin):
         self.object = None
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('medical_services.update_service'):
+        if not request.user.has_perm('medical_services.change_service'):
             return HttpResponseForbidden("У вас нет доступа")
         return super().dispatch(request, *args, **kwargs)
 
@@ -177,6 +179,20 @@ class ServiceCartView(View):
         }
         return render(request, 'medical_services/shopping_cart.html', context)
 
+
+class AddToCartView(View):
+    def post(self, request, pk):
+        json_data = json.loads(request.body)
+        service_id = json_data.get('service_id')
+        service = Service.objects.get(pk=service_id)
+
+        # Получите объект корзины текущего пользователя или создайте новый
+        cart, created = Cart.objects.get_or_create(client=request.user)
+
+        # Добавление услуги в корзину
+        cart.services.add(service)
+
+        return JsonResponse({'message': 'Услуга успешно добавлена в корзину.'})
 
 
 def send_cart_email(request):
