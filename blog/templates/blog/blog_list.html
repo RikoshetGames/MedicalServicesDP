@@ -3,7 +3,7 @@
 {% block content %}
 <div class="col-12 mb-5">
     {% if perms.blog.add_blog %}
-    <a class="btn btn-dark" href="{% url 'blog:create' %}">Добавить блог</a>
+    <a class="btn btn-dark" href="{% url 'blog:create' %}">Добавить новость</a>
     {% endif %}
 </div>
 {% for object in object_list %}
