@@ -105,7 +105,7 @@ class ServiceListView(ListView):
 
 
 class ServiceDetailView(DetailView):
-    """Класс отображения детальной информации о услуге."""
+    """Класс отображения детальной информации об услуге."""
     model = Service
 
     def get(self, request, pk):
