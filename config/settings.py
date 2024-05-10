@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'users',
     'medical_services',
+    'blog',
 
 ]
 

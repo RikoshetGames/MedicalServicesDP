@@ -6,8 +6,9 @@
         <div class="card-body">
             <section class="jumbotron text-center">
                 <div class="container">
-                    <h1 class="jumbotron-heading">Центр медицинских анализов</h1>
+                    <h1 class="jumbotron-heading">Медицинские исследования</h1>
                     <p class="lead text-muted">Для тебя и твоей семьи</p>
+                    <a href="{% url 'blog:blog_list' %}" class="btn btn-dark my-2">Новости</a>
                 </div>
             </section>
         </div>
@@ -21,7 +22,6 @@
                     <h1 class="jumbotron-heading">Здесь вы можете посмотреть наши медицинские услуги</h1>
                     <a href="{% url 'medical_services:category_list' %}" class="btn btn-dark my-2">Категории анализов</a>
                     <a href="{% url 'medical_services:service_list' %}" class="btn btn-dark my-2">Наши услуги</a>
-
                 </div>
             </section>
         </div>

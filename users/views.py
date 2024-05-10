@@ -2,10 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-# from django.contrib.messages.views import SuccessMessageMixin
-# from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.shortcuts import render

@@ -31,9 +31,9 @@
                 {% endif %}
                 <div style="margin-left: 15px;">
                     {% if user.first_name %}
-                        <h4 class="text-light mb-0">{{ user.first_name }} {{ user.last_name }}</h4>
+                        <h4 class="text-light mb-0">Аккаунт: {{ user.first_name }} {{ user.last_name }}</h4>
                     {% else %}
-                        <h4 class="text-light mb-0">{{ user.email }}</h4>
+                        <h4 class="text-light mb-0">Аккаунт: {{ user.email }}</h4>
                     {% endif %}
                 </div>
             </div>
